@@ -23,4 +23,6 @@ producList : ISingleProduct[] = []
     this.productService.getAllProducts().subscribe((res)=> this.producList = res);
 
   }
+
+  
 }
