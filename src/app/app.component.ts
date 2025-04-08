@@ -1,59 +1,26 @@
-import {ChangeDetectionStrategy, ChangeDetectorRef, Component, DoCheck, Inject, Injector, OnInit} from '@angular/core';
-import {Course} from './model/course';
-import {Observable} from 'rxjs';
-import {AppConfig, CONFIG_TOKEN} from './config';
-import {COURSES} from '../db-data';
-import {CoursesService} from './courses/courses.service';
-import {createCustomElement} from '@angular/elements';
-import {CourseTitleComponent} from './course-title/course-title.component';
-import {CourseCardComponent} from './courses/course-card/course-card.component';
-import {CourseImageComponent} from './courses/course-image/course-image.component';
-import {NgForOf} from '@angular/common';
-
+import { Component, OnInit } from "@angular/core";
+import { ProductsService } from "./products/services/products.service";
+import { CommonModule } from "@angular/common";
+import { ProductCardComponent } from "./products/components/product-card/product-card.component";
+import { ISingleProduct } from "./products/model/single-product.model";
 
 @Component({
-    selector: 'app-root',
-    templateUrl: './app.component.html',
-    styleUrls: ['./app.component.css'],
-    imports: [
-        CourseCardComponent,
-        CourseImageComponent,
-        NgForOf
-    ]
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.css"],
+  imports: [CommonModule , ProductCardComponent ],
+  providers:[ProductsService]
 })
 export class AppComponent implements OnInit {
+producList : ISingleProduct[] = []
+  constructor(private productService: ProductsService) {}
 
-    courses: Course[] = COURSES;
+  ngOnInit() {
+    this.getAllProducts()
+  }
 
-    coursesTotal = this.courses.length;
+  getAllProducts() {
+    this.productService.getAllProducts().subscribe((res)=> this.producList = res);
 
-    constructor(
-        private coursesService: CoursesService,
-        @Inject(CONFIG_TOKEN) private config: AppConfig,
-        private injector: Injector) {
-
-    }
-
-    ngOnInit() {
-
-        //const htmlElement = createCustomElement(CourseTitleComponent, {injector:this.injector});
-
-        //customElements.define('course-title', htmlElement);
-
-    }
-
-    onEditCourse() {
-
-            this.courses[1].category = 'ADVANCED';
-
-    }
-
-    save(course: Course) {
-        this.coursesService.saveCourse(course)
-            .subscribe(
-                () => console.log('Course Saved!')
-            );
-    }
-
-
+  }
 }

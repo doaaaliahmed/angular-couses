@@ -1,36 +1,13 @@
-<div class="top-menu">
-
-  <img class="logo"
-       src="https://angular-academy.s3.amazonaws.com/main-logo/main-page-logo-small-hat.png">
-
+<div class="w-full flex flex-wrap items-center justify-center gap-4 p-10">
+  <!-- now instead of *ngFor  use @for  , for loop must have a track experssion -->
+  <!-- @for option 
+    let index = $index , count return number of elements  , (first , last , even , odd  : useful for style )-->
+  <!-- to upgrade old version of angluer project  just run this command :-
+    -----------------------((( ng generate @angular/core:control-flow )))--------------------------------
+     -->
+  @for(product of producList; track product.id){
+  <product-card [product]="product"></product-card>
+  } @empty{
+  <h1 class="text-xl font-bold text-gray-800 dark:text-white">No data found</h1>
+  }
 </div>
-
-<div>
-
-  <div class="demo">
-
-
-      <button (click)="onEditCourse()" i18n>Edit Course</button>
-
-  </div>
-
-  <div class="courses">
-
-    <course-card *ngFor="let course of  courses  "
-                 (courseChanged)="save($event)"
-                 type="beginner"
-                 [course]="course">
-
-      <course-image [src]="course.iconUrl"></course-image>
-
-    </course-card>
-
-
-  </div>
-
-
-</div>
-
-
-
-
