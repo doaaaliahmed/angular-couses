@@ -1,13 +1,32 @@
-<div class="w-full flex flex-wrap items-center justify-center gap-4 p-10">
-  <!-- now instead of *ngFor  use @for  , for loop must have a track experssion -->
-  <!-- @for option 
+<div
+  class="flex flex-col gap-4 bg-gray-100 dark:bg-gray-950 p-10 h-screen overflow-y-hidden"
+>
+  <div class="p-4 rounded-md bg-white dark:bg-gray-700">
+    <filter-products
+      (filterProductsEvent)="filterProductsByTitle($event)"
+      (resetFiltersEvent)="resetFilters($event)"
+    ></filter-products>
+  </div>
+
+  <div
+    class="grid place-items-center gap-4  p-4 bg-white dark:bg-gray-700 rounded-md h-screen overflow-y-auto"
+    [ngClass]="{ 'grid-cols-1 md:grid-cols-2 xl:grid-cols-3': productList.length > 0 }"
+  >
+    <!-- now instead of *ngFor  use @for  , for loop must have a track experssion -->
+    <!-- @for option 
     let index = $index , count return number of elements  , (first , last , even , odd  : useful for style )-->
-  <!-- to upgrade old version of angluer project  just run this command :-
+    <!-- to upgrade old version of angluer project  just run this command :-
     -----------------------((( ng generate @angular/core:control-flow )))--------------------------------
      -->
-  @for(product of producList; track product.id){
-  <product-card [product]="product"></product-card>
-  } @empty{
-  <h1 class="text-xl font-bold text-gray-800 dark:text-white">No data found</h1>
-  }
+
+    @for(product of productList; track product.id){
+    <product-card [product]="product"></product-card>
+    } @empty{
+    <h1
+      class="text-xl font-bold text-gray-800 dark:text-white text-center w-full"
+    >
+      No data found
+    </h1>
+    }
+  </div>
 </div>
