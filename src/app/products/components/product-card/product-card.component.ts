@@ -3,9 +3,9 @@ import { ISingleProduct } from "../../model/single-product.model";
 
 @Component({
   selector: "product-card",
-  standalone: true,
   templateUrl: "./product-card.component.html",
   styleUrl: "./product-card.component.css",
+  standalone:false
 })
 export class ProductCardComponent {
   @Input() product: ISingleProduct;

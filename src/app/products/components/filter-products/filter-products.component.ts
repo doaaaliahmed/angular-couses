@@ -1,27 +1,28 @@
 import { Component, EventEmitter, Output } from "@angular/core";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { FormBuilder, FormControl } from "@angular/forms";
 
 @Component({
   selector: "filter-products",
-  standalone: true,
-  imports: [ReactiveFormsModule],
   templateUrl: "./filter-products.component.html",
   styleUrl: "./filter-products.component.css",
+  standalone : false
 })
 export class FilterProductsComponent {
   @Output() filterProductsEvent = new EventEmitter<string>();
   @Output() resetFiltersEvent = new EventEmitter<boolean>(false);
+  @Output() addProductEvent = new EventEmitter<boolean>(false);
 
-  search: FormControl = new FormControl("");
+  search: FormControl = this.fb.control("");
+
+  constructor(private fb : FormBuilder){}
 
   filterProducts() {
     if (this.search.value.length > 0)
       this.filterProductsEvent.emit(this.search.value);
+    else this.resetFiltersEvent.emit(true);
   }
 
-  resetFilters(){
-    this.search.reset();
-    this.resetFiltersEvent.emit(true);
-    
+  addNewProduct() {
+    this.addProductEvent.emit(true);
   }
 }

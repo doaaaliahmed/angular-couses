@@ -1,19 +1,23 @@
-import { Component, OnInit } from "@angular/core";
+import {
+  Component,
+  OnInit,
+
+} from "@angular/core";
 import { ProductsService } from "./products/services/products.service";
-import { CommonModule } from "@angular/common";
-import { ProductCardComponent } from "./products/components/product-card/product-card.component";
 import { ISingleProduct } from "./products/model/single-product.model";
-import { FilterProductsComponent } from "./products/components/filter-products/filter-products.component";
+import { AddProductModalComponent } from "./products/components/add-product-modal/add-product-modal.component";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
-  imports: [CommonModule, FilterProductsComponent, ProductCardComponent],
-  providers: [ProductsService],
+  standalone: false
 })
 export class AppComponent implements OnInit {
+  addProduct?: AddProductModalComponent;
+
   productList: ISingleProduct[] = [];
+  openProductDialog: boolean = false;
   constructor(private productService: ProductsService) {}
 
   ngOnInit() {
@@ -36,5 +40,13 @@ export class AppComponent implements OnInit {
     if (isReset) {
       this.getAllProducts();
     }
+  }
+
+  addNewProduct(isAdd: boolean) {
+    this.openProductDialog = isAdd;
+  }
+
+  onClose(isClose: boolean) {
+    this.openProductDialog = !isClose;
   }
 }
