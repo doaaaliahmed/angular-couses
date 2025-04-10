@@ -6,12 +6,16 @@ import {
 import { ProductsService } from "./products/services/products.service";
 import { ISingleProduct } from "./products/model/single-product.model";
 import { AddProductModalComponent } from "./products/components/add-product-modal/add-product-modal.component";
+import { FilterProductsComponent } from "./products/components/filter-products/filter-products.component";
+import { ProductCardComponent } from "./products/components/product-card/product-card.component";
+import { CommonModule } from "@angular/common";
 
 @Component({
   selector: "app-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
-  standalone: false
+  standalone: true,
+  imports :[FilterProductsComponent , AddProductModalComponent ,ProductCardComponent , CommonModule] 
 })
 export class AppComponent implements OnInit {
   addProduct?: AddProductModalComponent;
@@ -30,16 +34,8 @@ export class AppComponent implements OnInit {
       .subscribe((res) => (this.productList = res));
   }
 
-  filterProductsByTitle(value: string) {
-    this.productList = this.productList.filter((product) =>
-      product.title.toLocaleLowerCase().includes(value.toLocaleLowerCase())
-    );
-  }
-
-  resetFilters(isReset: boolean) {
-    if (isReset) {
-      this.getAllProducts();
-    }
+  filterProductsByTitle(Proudcts: ISingleProduct[]) {
+    this.productList = Proudcts;
   }
 
   addNewProduct(isAdd: boolean) {
