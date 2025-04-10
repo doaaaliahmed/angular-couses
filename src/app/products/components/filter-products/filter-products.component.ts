@@ -1,25 +1,40 @@
 import { Component, EventEmitter, Output } from "@angular/core";
-import { FormBuilder, FormControl } from "@angular/forms";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { ProductCardComponent } from "../product-card/product-card.component";
+import { ProductsService } from "../../services/products.service";
+import { ISingleProduct } from "../../model/single-product.model";
+import { debounceTime } from "rxjs/operators";
 
 @Component({
   selector: "filter-products",
   templateUrl: "./filter-products.component.html",
   styleUrl: "./filter-products.component.css",
-  standalone : false
+  standalone: true,
+  imports: [ReactiveFormsModule],
 })
 export class FilterProductsComponent {
-  @Output() filterProductsEvent = new EventEmitter<string>();
-  @Output() resetFiltersEvent = new EventEmitter<boolean>(false);
+  @Output() filterProductsEvent = new EventEmitter<ISingleProduct[]>();
   @Output() addProductEvent = new EventEmitter<boolean>(false);
 
-  search: FormControl = this.fb.control("");
+  search: FormControl = new FormControl("");
 
-  constructor(private fb : FormBuilder){}
+  constructor(private productService: ProductsService) {}
 
-  filterProducts() {
-    if (this.search.value.length > 0)
-      this.filterProductsEvent.emit(this.search.value);
-    else this.resetFiltersEvent.emit(true);
+  ngOnInit() {
+    this.search.valueChanges.pipe(
+      debounceTime(500)
+    ).subscribe((val) =>{
+       this.filterProducts(val)
+      });
+  }
+
+  filterProducts(val: string) {
+    this.productService.getAllProducts().subscribe((res) => {
+      const filterdProducts = res.filter((product) =>
+        product.title.toLocaleLowerCase().includes(val.toLocaleLowerCase())
+      );
+      this.filterProductsEvent.emit(filterdProducts);
+    });
   }
 
   addNewProduct() {

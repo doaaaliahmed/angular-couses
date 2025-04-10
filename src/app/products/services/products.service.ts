@@ -5,7 +5,7 @@ import { tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { ISingleProduct } from "../model/single-product.model";
 
-@Injectable()
+@Injectable({providedIn:'root'})
 export class ProductsService {
   constructor(private http: HttpClient) {}
 
