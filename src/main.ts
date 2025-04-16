@@ -5,6 +5,7 @@ import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
 import {AppComponent} from './app/app.component';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 if (environment.production) {
   enableProdMode();
@@ -19,7 +20,7 @@ bootstrapApplication(AppComponent, {
   providers: [
     importProvidersFrom(BrowserModule),
     provideAnimations(),
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()), provideAnimationsAsync()
   ],
 })
   .catch(err => console.log(err));
