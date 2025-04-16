@@ -5,3 +5,6 @@
 body{
     @apply bg-gray-100 dark:bg-gray-950 p-10;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

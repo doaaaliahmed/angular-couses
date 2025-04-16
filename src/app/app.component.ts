@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  signal,
 
 } from "@angular/core";
 import { ProductsService } from "./products/services/products.service";
@@ -15,10 +16,12 @@ import { CommonModule } from "@angular/common";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
   standalone: true,
-  imports :[FilterProductsComponent , AddProductModalComponent ,ProductCardComponent , CommonModule] 
+  imports :[FilterProductsComponent , AddProductModalComponent ,ProductCardComponent , CommonModule] ,
+  providers: [ProductsService]
 })
 export class AppComponent implements OnInit {
-  addProduct?: AddProductModalComponent;
+
+  productsCount = signal(0)
 
   productList: ISingleProduct[] = [];
   openProductDialog: boolean = false;
@@ -31,7 +34,11 @@ export class AppComponent implements OnInit {
   getAllProducts() {
     this.productService
       .getAllProducts()
-      .subscribe((res) => (this.productList = res));
+      .subscribe((res) => {
+        this.productList = res
+        this.productsCount.set(res.length)
+      }
+      );
   }
 
   filterProductsByTitle(Proudcts: ISingleProduct[]) {
