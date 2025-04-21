@@ -5,10 +5,19 @@ export interface ISingleProduct {
   description: string;
   category: string;
   image: string;
-  rating: IProductRate;
+  rating?: IProductRate;
 }
 
 export interface IProductRate {
   rate: number;
   count: number;
+}
+
+
+export interface ICreateProduct {
+  title: string;
+  price: number;
+  description: string;
+  category: string;
+  image: string;
 }

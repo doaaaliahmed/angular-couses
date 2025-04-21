@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { ISingleProduct } from "../model/single-product.model";
+import { ICreateProduct, ISingleProduct } from "../model/single-product.model";
 
 @Injectable()
 export class ProductsService {
@@ -12,6 +12,10 @@ export class ProductsService {
   getAllProducts(): Observable<ISingleProduct[]> {
     return this.http
       .get<ISingleProduct[]>(`${environment.API}/products`)
-      .pipe();
+  }
+
+
+  createProduct(product: Partial<ICreateProduct>): Observable<ICreateProduct> {
+    return this.http.post<ICreateProduct>(`${environment.API}/products`, product)
   }
 }
