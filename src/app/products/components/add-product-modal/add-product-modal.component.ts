@@ -1,6 +1,7 @@
 import {
   Component,
   EventEmitter,
+  inject,
   Output,
   signal,
   ViewChild,
@@ -20,6 +21,9 @@ export class AddProductModalComponent {
  
   @Output() closeProductmodal = new EventEmitter<boolean>(false);
   @Output() createdProductData = new EventEmitter<Partial<ICreateProduct>>();
+
+  //  INJECTORS
+  private fb = inject(FormBuilder)
   
   fg = this.fb.group({
     title: [{ value: null, disabled: false }, [Validators.required]],
@@ -31,7 +35,7 @@ export class AddProductModalComponent {
 
   imagePreview = signal<string | ArrayBuffer | null>(null);
 
-  constructor(private fb: FormBuilder, private ProductSVC: ProductsService) {}
+  constructor() {}
 
   onClose() {
     this.closeProductmodal.emit(true);

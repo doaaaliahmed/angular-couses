@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, inject, Output } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs/operators';
 import { ProductsService } from '../../services/products.service';
@@ -15,7 +15,11 @@ export class SearchBarComponent {
 
   search: FormControl = new FormControl("");
 
-  constructor(private productService: ProductsService) {}
+  //INJECTORS 
+  productService = inject(ProductsService)
+
+
+  constructor() {}
 
   ngOnInit() {
     this.search.valueChanges.pipe(

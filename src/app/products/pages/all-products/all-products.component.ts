@@ -5,6 +5,7 @@ import {
   computed,
   signal,
   afterNextRender,
+  inject,
 } from '@angular/core';
 import { AddProductModalComponent } from '../../components/add-product-modal/add-product-modal.component';
 import { ProductCardComponent } from '../../components/product-card/product-card.component';
@@ -56,7 +57,11 @@ export class AllProductsComponent {
       : products;
   });
 
-  constructor(private productService: ProductsService) {
+
+  // INJECTORS
+  productsService = inject(ProductsService);
+
+  constructor() {
     afterNextRender(() => {
       this.loadProducts();
     });
@@ -64,7 +69,7 @@ export class AllProductsComponent {
 
   // Load all products
   loadProducts() {
-    this.productService.getAllProducts().subscribe((products) => {
+    this.productsService.getAllProducts().subscribe((products) => {
       this.allProducts.set(products);
     });
   }
@@ -87,7 +92,7 @@ export class AllProductsComponent {
   createProduct(product: Partial<ICreateProduct>) {
     this.openProductDialog = false;
 
-    this.productService.createProduct(product).subscribe({
+    this.productsService.createProduct(product).subscribe({
       next: (createdProduct) => {
         this.allProducts.update((prev) => [...prev, createdProduct]);
         this.showToast('Product Created Successfully', true);
