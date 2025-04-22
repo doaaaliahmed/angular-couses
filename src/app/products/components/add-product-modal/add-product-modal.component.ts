@@ -1,6 +1,14 @@
-import { Component, EventEmitter, Inject, Output } from "@angular/core";
+import {
+  Component,
+  EventEmitter,
+  inject,
+  Output,
+  signal,
+  ViewChild,
+} from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ProductsService } from "../../services/products.service";
+import { ICreateProduct } from "../../model/single-product.model";
 
 @Component({
   selector: "add-product-modal",
@@ -10,10 +18,13 @@ import { ProductsService } from "../../services/products.service";
   imports: [ReactiveFormsModule],
 })
 export class AddProductModalComponent {
+ 
   @Output() closeProductmodal = new EventEmitter<boolean>(false);
+  @Output() createdProductData = new EventEmitter<Partial<ICreateProduct>>();
 
-
-
+  //  INJECTORS
+  private fb = inject(FormBuilder)
+  
   fg = this.fb.group({
     title: [{ value: null, disabled: false }, [Validators.required]],
     price: [{ value: null, disabled: false }, [Validators.required]],
@@ -22,7 +33,9 @@ export class AddProductModalComponent {
     image: [{ value: null, disabled: false }, [Validators.required]],
   });
 
-  constructor(private fb : FormBuilder , private ProductSVC : ProductsService) {}
+  imagePreview = signal<string | ArrayBuffer | null>(null);
+
+  constructor() {}
 
   onClose() {
     this.closeProductmodal.emit(true);
@@ -35,16 +48,14 @@ export class AddProductModalComponent {
       const reader = new FileReader();
       reader.onload = () => {
         this.fg.get("image")?.setValue(reader.result as string); // base64 data URL
+        this.imagePreview.set(reader.result);
       };
       reader.readAsDataURL(file);
     }
   }
 
-
-  save(){
-    if(this.fg.invalid) return;
-    
-    this.ProductSVC.createProduct(this.fg.value).subscribe(res=> console.log(res))
-
+  save() {
+    if (this.fg.invalid) return;
+    this.createdProductData.emit(this.fg.value);
   }
 }
