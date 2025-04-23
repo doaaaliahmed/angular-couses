@@ -98,7 +98,7 @@
               <img
                 [src]="imagePreview()"
                 alt="Image Preview"
-                class="w-full h-48 object-cover rounded-lg"
+                class="w-full h-48 object-contain rounded-lg"
               />
               }
             </div>
@@ -146,10 +146,10 @@
               formControlName="category"
             >
               <option selected="">Select category ...</option>
-              <option value="men">men's clothing</option>
-              <option value="lw">jewelery</option>
+              <option value="men's clothing">men's clothing</option>
+              <option value="jewelery">jewelery</option>
               <option value="electronics">electronics</option>
-              <option value="women">women's clothing</option>
+              <option value="women's clothing">women's clothing</option>
             </select>
           </div>
           <div class="col-span-2">

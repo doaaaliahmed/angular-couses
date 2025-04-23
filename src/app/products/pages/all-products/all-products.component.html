@@ -17,7 +17,11 @@
     }"
   >
     @for(product of filteredProducts(); track product.id){
-    <product-card [product]="product"></product-card>
+    <product-card 
+    [product]="product" 
+    (deleteProductEvent)="delete($event)"
+    (editProductEvent)="openDialogToEdit($event)"
+    ></product-card>
     } @empty{
     <h1
       class="h-[80vh] grid place-items-center text-xl font-bold text-gray-800 dark:text-white w-full"
@@ -33,6 +37,8 @@
 <add-product-modal
   (closeProductmodal)="onClose($event)"
   (createdProductData)="createProduct($event)"
+  (updatedProductData)="updateProduct($event)"
+  [productData]="productToUpdate()"
 ></add-product-modal>
 } @if(showSuccess()){
 <sucess-alert-message [message]="message()"></sucess-alert-message>

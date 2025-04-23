@@ -13,11 +13,3 @@ export interface IProductRate {
   count: number;
 }
 
-
-export interface ICreateProduct {
-  title: string;
-  price: number;
-  description: string;
-  category: string;
-  image: string;
-}

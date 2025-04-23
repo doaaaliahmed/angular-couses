@@ -14,7 +14,6 @@ import { SucessAlertMessageComponent } from '../../components/sucess-alert-messa
 import { ErrorAlertMessageComponent } from '../../components/error-alert-message/error-alert-message.component';
 import { ProductsService } from '../../services/products.service';
 import {
-  ICreateProduct,
   ISingleProduct,
 } from '../../model/single-product.model';
 
@@ -42,6 +41,7 @@ export class AllProductsComponent {
   private allProducts = signal<ISingleProduct[]>([]);
   private searchTitle = signal<string>('');
   openProductDialog = false;
+  productToUpdate = signal<ISingleProduct | null>(null);
 
   showSuccess = signal(false);
   showError = signal(false);
@@ -89,13 +89,50 @@ export class AllProductsComponent {
   }
 
   // Create a product
-  createProduct(product: Partial<ICreateProduct>) {
+  createProduct(product: Partial<ISingleProduct>) {
     this.openProductDialog = false;
 
     this.productsService.createProduct(product).subscribe({
       next: (createdProduct) => {
         this.allProducts.update((prev) => [...prev, createdProduct]);
         this.showToast('Product Created Successfully', true);
+      },
+      error: () => {
+        this.showToast('Something went wrong. Please try again.', false);
+      },
+    });
+  }
+
+  // Create a product
+
+  delete(id: number) {
+    this.productsService.deleteProduct(id).subscribe({
+      next: () => {
+        this.allProducts.update((prev) => prev.filter((p) => p.id !== id));
+        this.showToast('Product Deleted Successfully', true);
+      },
+      error: () => {
+        this.showToast('Something went wrong. Please try again.', false);
+      },
+    });
+  }
+
+  // Update a product
+  openDialogToEdit(product: ISingleProduct) {
+    this.openProductDialog = true;
+    this.productToUpdate.set(product);
+  }
+
+  // Create a product
+  updateProduct(product: Partial<ISingleProduct>) {
+    this.openProductDialog = false;
+
+    this.productsService.updateProduct(product).subscribe({
+      next: (createdProduct) => {
+        this.allProducts.update((prev) =>
+          prev.map((p) => (p.id === createdProduct.id ? createdProduct : p))
+        );
+        this.showToast('Product Updated Successfully', true);
       },
       error: () => {
         this.showToast('Something went wrong. Please try again.', false);

@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, input, Input, output } from "@angular/core";
 import { ISingleProduct } from "../../model/single-product.model";
 import { MatIconModule } from "@angular/material/icon";
 
@@ -10,11 +10,18 @@ import { MatIconModule } from "@angular/material/icon";
   imports: [MatIconModule],
 })
 export class ProductCardComponent {
-  @Input() product: ISingleProduct;
+  product = input.required<ISingleProduct>();
+  deleteProductEvent = output<number>();
+  editProductEvent = output<ISingleProduct>();
 
-  delete(id: number) {}
 
-  update(id: number) {}
+  delete() {
+    this.deleteProductEvent.emit(this.product().id);
+  }
+
+  update() {
+    this.editProductEvent.emit(this.product());
+  }
 
   addToCart(id: number) {}
 }

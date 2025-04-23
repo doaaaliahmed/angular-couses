@@ -2,10 +2,10 @@
   class="flex max-w-lg overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 p-2"
 >
   <!-- use @if() , @else statement instead of *ngIf -->
-  @if(product.image){
+  @if(product().image){
   <div
     class="w-[14rem] bg-cover rounded-l-md"
-    style="background-image: url('{{ product.image }}')"
+    style="background-image: url('{{ product().image }}')"
   ></div>
   }@else{
   <div
@@ -20,22 +20,22 @@
     <h1
       class="text-xl font-bold text-gray-800 dark:text-white h-14 overflow-hidden text-ellipsis"
     >
-      {{ product.title }}
+      {{ product().title }}
     </h1>
 
     <p
       class="mt-2 text-sm text-white px-2 py-1 rounded-md dark:bg-blue-400 bg-blue-900 w-fit"
     >
-      {{ product.category }}
+      {{ product().category }}
     </p>
 
     <p
       class="mt-2 text-sm text-gray-600 dark:text-gray-400 h-20 overflow-hidden text-ellipsis"
     >
-      {{ product.description }}
+      {{ product().description }}
     </p>
 
-    @if(product.rating){
+    @if(product().rating){
     <div class="flex items-center gap-2 mt-2">
       <div class="flex item-center">
         <svg
@@ -78,18 +78,18 @@
         </svg>
       </div>
       <span class="text-gray-600 dark:text-gray-200 font-bold"
-        >({{ product.rating.rate }})</span
+        >({{ product().rating.rate }})</span
       >
     </div>
     }
 
     <div class="flex justify-between mt-3 item-center">
       <h1 class="text-lg font-bold text-gray-700 dark:text-gray-200 md:text-xl">
-        ${{ product.price }}
+        ${{ product().price }}
       </h1>
       <div class="flex items-center gap-2">
         <button
-          (click)="delete(product.id)"
+          (click)="delete()"
           class="px-2 py-1 text-xs font-bold text-white uppercase transition-colors duration-300 transform bg-gray-800 rounded dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none focus:bg-gray-700 dark:focus:bg-gray-600"
         >
           <mat-icon
@@ -99,17 +99,18 @@
           ></mat-icon>
         </button>
         <button
-          (click)="update(product.id)"
+          (click)="update()"
           class="px-2 py-1 text-xs font-bold text-white uppercase transition-colors duration-300 transform bg-gray-800 rounded dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none focus:bg-gray-700 dark:focus:bg-gray-600"
         >
           <mat-icon
             aria-hidden="false"
             aria-label="Example home icon"
             fontIcon="edit"
+
           ></mat-icon>
         </button>
         <button
-          (click)="addToCart(product.id)"
+          (click)="addToCart(product().id)"
           class="px-2 py-1 text-xs font-bold text-white uppercase transition-colors duration-300 transform bg-gray-800 rounded dark:bg-gray-700 hover:bg-gray-700 dark:hover:bg-gray-600 focus:outline-none focus:bg-gray-700 dark:focus:bg-gray-600"
         >
           <mat-icon
