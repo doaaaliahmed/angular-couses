@@ -1,0 +1,46 @@
+@if(messages()){
+<div
+  class="w-full flex items-stretch justify-center fixed bottom-10 left-50 translate-x-50 z-[9999]"
+>
+  <div
+    class="flex w-full max-w-3xl overflow-hidden bg-white rounded-lg shadow-md dark:bg-gray-800"
+  >
+    <mat-icon
+      [ngClass]="{
+        'bg-emerald-500': messages()?.savirty === 'success',
+        'bg-red-500': messages()?.savirty === 'error',
+        'bg-yellow-500': messages()?.savirty === 'warning'
+      }"
+      class="text-white !h-10 !w-10 p-2"
+    >
+      {{
+        messages()?.savirty === "error" || messages()?.savirty === "warning"
+          ? "error_outline"
+          : "check_circle_outline"
+      }}
+    </mat-icon>
+
+    <div class="px-4 py-2  flex-1">
+      <div class="mx-3">
+        <span class="font-semibold "
+        [ngClass]="{
+            'text-emerald-500': messages()?.savirty === 'success',
+            'text-red-500': messages()?.savirty === 'error',
+            'text-yellow-500': messages()?.savirty === 'warning'
+          }"
+        >
+          {{ messages()?.text }}
+        </span>
+      </div>
+    </div>
+
+    <button
+      mat-icon-button
+      class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+      (click)="onClose()"
+    >
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</div>
+}

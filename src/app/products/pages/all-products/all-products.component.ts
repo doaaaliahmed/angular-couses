@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
 import {
   Component,
   ViewChild,
@@ -6,46 +6,42 @@ import {
   signal,
   afterNextRender,
   inject,
-} from '@angular/core';
-import { AddProductModalComponent } from '../../components/add-product-modal/add-product-modal.component';
-import { ProductCardComponent } from '../../components/product-card/product-card.component';
-import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
-import { SucessAlertMessageComponent } from '../../components/sucess-alert-message/sucess-alert-message.component';
-import { ErrorAlertMessageComponent } from '../../components/error-alert-message/error-alert-message.component';
-import { ProductsService } from '../../services/products.service';
-import {
-  ISingleProduct,
-} from '../../model/single-product.model';
+} from "@angular/core";
+import { AddProductModalComponent } from "../../components/add-product-modal/add-product-modal.component";
+import { ProductCardComponent } from "../../components/product-card/product-card.component";
+import { SearchBarComponent } from "../../components/search-bar/search-bar.component";
+import { ProductsService } from "../../services/products.service";
+import { ISingleProduct } from "../../model/single-product.model";
+import { LoadingService } from "src/app/loading/services/loading.service";
+import { LoadingComponent } from "src/app/loading/loading.component";
+import { MessageService } from "src/app/messages/services/message.service";
+import { MessagesComponent } from "src/app/messages/messages.component";
 
 @Component({
-  selector: 'all-products',
-  templateUrl: './all-products.component.html',
-  styleUrl: './all-products.component.css',
+  selector: "all-products",
+  templateUrl: "./all-products.component.html",
+  styleUrl: "./all-products.component.css",
   standalone: true,
   imports: [
     CommonModule,
     SearchBarComponent,
     AddProductModalComponent,
     ProductCardComponent,
-    SucessAlertMessageComponent,
-    ErrorAlertMessageComponent,
+    LoadingComponent,
+    MessagesComponent
   ],
   providers: [ProductsService],
 })
 export class AllProductsComponent {
-  // ViewChilds
-  @ViewChild('successRef') successRef!: SucessAlertMessageComponent;
-  @ViewChild('errorRef') errorRef!: ErrorAlertMessageComponent;
-
   // Signals
-  private allProducts = signal<ISingleProduct[]>([]);
-  private searchTitle = signal<string>('');
+  private allProducts = signal<ISingleProduct[] | null>(null);
+  private searchTitle = signal<string>("");
   openProductDialog = false;
   productToUpdate = signal<ISingleProduct | null>(null);
 
   showSuccess = signal(false);
   showError = signal(false);
-  message = signal<string>('');
+  message = signal<string>("");
 
   // Computed
   readonly filteredProducts = computed(() => {
@@ -53,13 +49,19 @@ export class AllProductsComponent {
     const title = this.searchTitle().toLowerCase();
 
     return title
-      ? products.filter((p) => p.title.toLowerCase().includes(title))
+      ? products?.filter((p) => p.title.toLowerCase().includes(title))
       : products;
   });
 
+  readonly noDataFound = computed(() => {
+    const filterdProducts = this.filteredProducts();
+
+    return filterdProducts && filterdProducts.length === 0 ? true : false;
+  });
 
   // INJECTORS
   productsService = inject(ProductsService);
+  messageService = inject(MessageService);
 
   constructor() {
     afterNextRender(() => {
@@ -95,10 +97,17 @@ export class AllProductsComponent {
     this.productsService.createProduct(product).subscribe({
       next: (createdProduct) => {
         this.allProducts.update((prev) => [...prev, createdProduct]);
-        this.showToast('Product Created Successfully', true);
+        this.messageService.showMessage({
+          text : "Product Created Successfully",
+          savirty : 'success'
+        });
       },
       error: () => {
-        this.showToast('Something went wrong. Please try again.', false);
+        this.messageService.showMessage({
+          text : "Something went wrong. Please try again.",
+          savirty : 'error'
+        });
+       
       },
     });
   }
@@ -109,10 +118,17 @@ export class AllProductsComponent {
     this.productsService.deleteProduct(id).subscribe({
       next: () => {
         this.allProducts.update((prev) => prev.filter((p) => p.id !== id));
-        this.showToast('Product Deleted Successfully', true);
+        this.messageService.showMessage({
+          text : "Product Deleted Successfully",
+          savirty : 'success'
+        });
+      
       },
       error: () => {
-        this.showToast('Something went wrong. Please try again.', false);
+        this.messageService.showMessage({
+          text : "Something went wrong. Please try again.",
+          savirty : 'error'
+        });
       },
     });
   }
@@ -132,26 +148,18 @@ export class AllProductsComponent {
         this.allProducts.update((prev) =>
           prev.map((p) => (p.id === createdProduct.id ? createdProduct : p))
         );
-        this.showToast('Product Updated Successfully', true);
+        this.messageService.showMessage({
+          text : "Product Updated Successfully",
+          savirty : 'success'
+        });
+        
       },
       error: () => {
-        this.showToast('Something went wrong. Please try again.', false);
+        this.messageService.showMessage({
+          text : "Something went wrong. Please try again.",
+          savirty : 'error'
+        });
       },
     });
-  }
-
-  // Show success or error message
-  private showToast(msg: string, isSuccess: boolean) {
-    this.message.set(msg);
-    if (isSuccess) {
-      this.showSuccess.set(true);
-    } else {
-      this.showError.set(true);
-    }
-
-    setTimeout(() => {
-      this.showSuccess.set(false);
-      this.showError.set(false);
-    }, 2000);
   }
 }
