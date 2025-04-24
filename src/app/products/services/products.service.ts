@@ -1,9 +1,8 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import { tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
-import { ICreateProduct, ISingleProduct } from "../model/single-product.model";
+import { ISingleProduct } from "../model/single-product.model";
 
 @Injectable()
 export class ProductsService {
@@ -15,14 +14,14 @@ export class ProductsService {
 
   
 
-  createProduct(product: Partial<ICreateProduct>): Observable<ISingleProduct> {
+  createProduct(product: Partial<ISingleProduct>): Observable<ISingleProduct> {
     return this.http.post<ISingleProduct>(
       `${environment.API}/products`,
       product
     );
   }
 
-  updateProduct(product: ISingleProduct): Observable<ISingleProduct> {
+  updateProduct(product: Partial<ISingleProduct>): Observable<ISingleProduct> {
     return this.http.put<ISingleProduct>(
       `${environment.API}/products/${product.id}`,
       product

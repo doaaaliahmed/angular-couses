@@ -2,13 +2,16 @@ import {
   Component,
   EventEmitter,
   inject,
+  input,
+  OnChanges,
+  output,
   Output,
   signal,
   ViewChild,
 } from "@angular/core";
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { ProductsService } from "../../services/products.service";
-import { ICreateProduct } from "../../model/single-product.model";
+import { ISingleProduct } from "../../model/single-product.model";
 
 @Component({
   selector: "add-product-modal",
@@ -17,15 +20,20 @@ import { ICreateProduct } from "../../model/single-product.model";
   standalone: true,
   imports: [ReactiveFormsModule],
 })
-export class AddProductModalComponent {
- 
-  @Output() closeProductmodal = new EventEmitter<boolean>(false);
-  @Output() createdProductData = new EventEmitter<Partial<ICreateProduct>>();
+export class AddProductModalComponent implements OnChanges {
+  //OutPut signals
+  closeProductmodal = output<boolean>();
+  createdProductData = output<Partial<ISingleProduct>>();
+  updatedProductData = output<Partial<ISingleProduct>>();
+
+  //Input signals
+  productData = input<ISingleProduct>();
 
   //  INJECTORS
-  private fb = inject(FormBuilder)
-  
+  private fb = inject(FormBuilder);
+
   fg = this.fb.group({
+    id: [{ value: 0, disabled: false }],
     title: [{ value: null, disabled: false }, [Validators.required]],
     price: [{ value: null, disabled: false }, [Validators.required]],
     description: [{ value: null, disabled: false }, [Validators.required]],
@@ -36,6 +44,21 @@ export class AddProductModalComponent {
   imagePreview = signal<string | ArrayBuffer | null>(null);
 
   constructor() {}
+
+  ngOnChanges() {
+    if (this.productData()) {
+      this.fg.patchValue({
+        id: this.productData().id,
+        title: this.productData().title,
+        price: this.productData().price,
+        description: this.productData().description,
+        category: this.productData().category,
+        image: this.productData().image,
+      });
+
+      this.imagePreview.set(this.productData().image);
+    }
+  }
 
   onClose() {
     this.closeProductmodal.emit(true);
@@ -56,6 +79,7 @@ export class AddProductModalComponent {
 
   save() {
     if (this.fg.invalid) return;
-    this.createdProductData.emit(this.fg.value);
+    if (this.fg.value.id === 0) this.createdProductData.emit(this.fg.value);
+    else this.updatedProductData.emit(this.fg.value);
   }
 }

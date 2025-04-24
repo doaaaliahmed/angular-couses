@@ -9,33 +9,44 @@
     ></search-bar>
   </div>
 
+  <!-- Loading Indicator -->
+  <loading></loading>
+
   <!-- Product Grid -->
+  @if (filteredProducts()?.length > 0) {
   <div
-    class="grid place-items-center gap-4 p-4 bg-white dark:bg-gray-700 rounded-md"
+    class="grid place-items-center gap-4 p-4 bg-white dark:bg-gray-700 rounded-md min-h-screen"
     [ngClass]="{
       'grid-cols-1 md:grid-cols-2 xl:grid-cols-3': filteredProducts().length > 0
     }"
   >
-    @for(product of filteredProducts(); track product.id){
-    <product-card [product]="product"></product-card>
-    } @empty{
-    <h1
-      class="h-[80vh] grid place-items-center text-xl font-bold text-gray-800 dark:text-white w-full"
-    >
-      <span>No data found</span>
-    </h1>
+    @for (product of filteredProducts(); track product.id) {
+    <product-card
+      [product]="product"
+      (deleteProductEvent)="delete($event)"
+      (editProductEvent)="openDialogToEdit($event)"
+    ></product-card>
     }
   </div>
-</div>
+  } @else if (noDataFound()) {
+  <h1
+    class="w-full h-80 grid place-items-center text-xl font-bold text-gray-800 dark:text-white"
+  >
+    <span>No data found</span>
+  </h1>
 
-<!-- Modals and Alerts -->
-@if(openProductDialog){
-<add-product-modal
-  (closeProductmodal)="onClose($event)"
-  (createdProductData)="createProduct($event)"
-></add-product-modal>
-} @if(showSuccess()){
-<sucess-alert-message [message]="message()"></sucess-alert-message>
-} @if(showError()){
-<error-alert-message [message]="errorMessage()"></error-alert-message>
-}
+  }
+
+  <messages/>
+  <!-- Modals and Alerts -->
+  @if (openProductDialog) {
+  <add-product-modal
+    (closeProductmodal)="onClose($event)"
+    (createdProductData)="createProduct($event)"
+    (updatedProductData)="updateProduct($event)"
+    [productData]="productToUpdate()"
+  ></add-product-modal>
+  }
+
+
+</div>
