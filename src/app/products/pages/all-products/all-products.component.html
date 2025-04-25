@@ -1,7 +1,7 @@
 <div class="flex flex-col gap-4">
   <!-- Sticky Search Bar -->
   <div
-    class="p-4 rounded-md bg-white/50 dark:bg-gray-700/30 sticky top-0 z-[999] backdrop-blur-md"
+    class="p-4 rounded-md bg-white/50 dark:bg-gray-700/30 "
   >
     <search-bar
       (filterProductsEventByTitle)="filterProductsByTitle($event)"
@@ -12,13 +12,11 @@
   <!-- Loading Indicator -->
   <loading></loading>
 
-  <!-- Product Grid -->
+  <!-- Products List -->
+ 
   @if (filteredProducts()?.length > 0) {
   <div
-    class="grid place-items-center gap-4 p-4 bg-white dark:bg-gray-700 rounded-md min-h-screen"
-    [ngClass]="{
-      'grid-cols-1 md:grid-cols-2 xl:grid-cols-3': filteredProducts().length > 0
-    }"
+    class="flex items-center flex-wrap justify-start gap-4 p-4 bg-white dark:bg-gray-700 rounded-md min-h-screen"
   >
     @for (product of filteredProducts(); track product.id) {
     <product-card
@@ -37,7 +35,7 @@
 
   }
 
-  <messages/>
+ 
   <!-- Modals and Alerts -->
   @if (openProductDialog) {
   <add-product-modal
