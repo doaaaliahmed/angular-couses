@@ -1,10 +1,10 @@
 <div
-  class="flex max-w-lg overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 p-2"
+  class="flex   flex-col sm:flex-row max-w-lg overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 p-2"
 >
   <!-- use @if() , @else statement instead of *ngIf -->
   @if(product().image){
   <div
-    class="w-[14rem] bg-cover rounded-l-md"
+    class=" w-full max-sm:h-56  sm:w-[14rem] bg-cover rounded-l-md"
     style="background-image: url('{{ product().image }}')"
   ></div>
   }@else{
@@ -16,7 +16,7 @@
   ></div>
   }
 
-  <div class="w-2/3 p-4 md:p-4">
+  <div class="w-full sm:w-2/3 p-4 md:p-4">
     <h1
       class="text-xl font-bold text-gray-800 dark:text-white h-14 overflow-hidden text-ellipsis"
     >

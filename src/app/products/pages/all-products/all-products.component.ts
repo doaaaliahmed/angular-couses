@@ -12,10 +12,8 @@ import { ProductCardComponent } from "../../components/product-card/product-card
 import { SearchBarComponent } from "../../components/search-bar/search-bar.component";
 import { ProductsService } from "../../services/products.service";
 import { ISingleProduct } from "../../model/single-product.model";
-import { LoadingService } from "src/app/loading/services/loading.service";
 import { LoadingComponent } from "src/app/loading/loading.component";
 import { MessageService } from "src/app/messages/services/message.service";
-import { MessagesComponent } from "src/app/messages/messages.component";
 
 @Component({
   selector: "all-products",
@@ -27,8 +25,7 @@ import { MessagesComponent } from "src/app/messages/messages.component";
     SearchBarComponent,
     AddProductModalComponent,
     ProductCardComponent,
-    LoadingComponent,
-    MessagesComponent
+    LoadingComponent
   ],
   providers: [ProductsService],
 })
@@ -38,10 +35,6 @@ export class AllProductsComponent {
   private searchTitle = signal<string>("");
   openProductDialog = false;
   productToUpdate = signal<ISingleProduct | null>(null);
-
-  showSuccess = signal(false);
-  showError = signal(false);
-  message = signal<string>("");
 
   // Computed
   readonly filteredProducts = computed(() => {
