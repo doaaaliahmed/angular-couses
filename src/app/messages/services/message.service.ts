@@ -11,9 +11,8 @@ export class MessageService {
 
   showMessage(message: Message) {
     this.messages.set(message);
+    setTimeout(this.clearMessage, 3000);
   }
 
-  clearMessage() {
-    this.messages.set(null);
-  }
+  clearMessage = () => this.messages.set(null);
 }
