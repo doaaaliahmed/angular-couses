@@ -1,4 +1,4 @@
-import { Component, effect, inject, signal } from "@angular/core";
+import { Component, effect, inject, OnDestroy, OnInit, signal } from "@angular/core";
 import {
   FormBuilder,
   FormGroup,
@@ -17,19 +17,16 @@ import { Router } from "@angular/router";
   styleUrl: "./login.component.css",
   imports: [CommonModule, ReactiveFormsModule],
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   fb = inject(FormBuilder);
   messageService = inject(MessageService);
   authService = inject(AuthService);
-  route =   inject(Router);
 
   usersList = signal<User[]>([]);
 
-  constructor() {
-    effect(() => {
+  ngOnInit() {
       this.getAllUsers();
-    });
   }
 
   getAllUsers() {
@@ -60,8 +57,9 @@ export class LoginComponent {
     if (this.fg.valid) {
       const { username, password } = this.fg.value;
       this.authService.login(username, password);
-      this.route.navigate(['/products']);
+      
 
     }
   }
+
 }

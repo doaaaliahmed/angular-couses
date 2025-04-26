@@ -14,6 +14,7 @@ import { provideAnimationsAsync } from "@angular/platform-browser/animations/asy
 import { provideRouter } from "@angular/router";
 import { routes } from "./app/app.routes";
 import { LoadingInterceptor } from "./app/loading/services/loading.intercptor";
+import { AuthInterceptor } from "./app/auth/services/auth.interceptor";
 
 if (environment.production) {
   enableProdMode();
@@ -28,7 +29,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(BrowserModule),
     provideAnimations(),
     provideRouter(routes),
-    provideHttpClient(withFetch(), withInterceptors([LoadingInterceptor])),
+    provideHttpClient(withFetch(), withInterceptors([LoadingInterceptor , AuthInterceptor])),
     provideAnimationsAsync(),
   ],
 }).catch((err) => console.log(err));
